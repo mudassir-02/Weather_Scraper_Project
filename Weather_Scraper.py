@@ -35,46 +35,27 @@ def save_to_db(city, temp, condition, humidity, wind):
     conn.commit()
     conn.close()
 
-    # Weather Info
-icon_lbl = tk.Label(main_frame, bg="white")
-icon_lbl.pack()
+# ---------- EXPORT ----------
+def export_history():
+    conn = sqlite3.connect("weather_history.db")
+    c = conn.cursor()
+    c.execute("SELECT * FROM weather")
+    rows = c.fetchall()
+    conn.close()
 
-temp_lbl = tk.Label(main_frame, text="Temperature: ", font=("Arial", 12), bg="white")
-temp_lbl.pack(pady=4)
+    if not rows:
+        messagebox.showwarning("No Data", "No data to export.")
+        return
 
-cond_lbl = tk.Label(main_frame, text="Condition: ", font=("Arial", 12), bg="white")
-cond_lbl.pack(pady=4)
+    file_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
+    if file_path:
+        with open(file_path, mode='w', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f)
+            writer.writerow(['ID', 'City', 'Temperature', 'Condition', 'Humidity', 'Wind', 'Date'])
+            writer.writerows(rows)
+        messagebox.showinfo("Success", f"Data saved to {file_path}")
 
-hum_lbl = tk.Label(main_frame, text="Humidity: ", font=("Arial", 12), bg="white")
-hum_lbl.pack(pady=4)
-
-wind_lbl = tk.Label(main_frame, text="Wind: ", font=("Arial", 12), bg="white")
-wind_lbl.pack(pady=4)
-
-# Export Button
-tk.Button(main_frame, text="💾 Export Weather History", font=("Arial", 12), bg="green", fg="white",
-          activebackground="#228B22", bd=0, width=28, command=export_history).pack(pady=20)
-
-root.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# ---------- WEATHER FETCH ----------
 def get_weather():
     city = city_var.get().strip()
     unit = unit_var.get()
@@ -146,7 +127,24 @@ unit_frame.pack(pady=6)
 tk.Button(main_frame, text="🔍 Get Weather", font=("Arial", 12), command=get_weather, bg="#007ACC", fg="white",
           activebackground="#005F99", width=25, height=1, bd=0).pack(pady=10)
 
+# Weather Info
+icon_lbl = tk.Label(main_frame, bg="white")
+icon_lbl.pack()
 
+temp_lbl = tk.Label(main_frame, text="Temperature: ", font=("Arial", 12), bg="white")
+temp_lbl.pack(pady=4)
 
+cond_lbl = tk.Label(main_frame, text="Condition: ", font=("Arial", 12), bg="white")
+cond_lbl.pack(pady=4)
 
-    
+hum_lbl = tk.Label(main_frame, text="Humidity: ", font=("Arial", 12), bg="white")
+hum_lbl.pack(pady=4)
+
+wind_lbl = tk.Label(main_frame, text="Wind: ", font=("Arial", 12), bg="white")
+wind_lbl.pack(pady=4)
+
+# Export Button
+tk.Button(main_frame, text="💾 Export Weather History", font=("Arial", 12), bg="green", fg="white",
+          activebackground="#228B22", bd=0, width=28, command=export_history).pack(pady=20)
+
+root.mainloop()
