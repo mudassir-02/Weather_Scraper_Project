@@ -35,6 +35,28 @@ def save_to_db(city, temp, condition, humidity, wind):
     conn.commit()
     conn.close()
 
+    # Weather Info
+icon_lbl = tk.Label(main_frame, bg="white")
+icon_lbl.pack()
+
+temp_lbl = tk.Label(main_frame, text="Temperature: ", font=("Arial", 12), bg="white")
+temp_lbl.pack(pady=4)
+
+cond_lbl = tk.Label(main_frame, text="Condition: ", font=("Arial", 12), bg="white")
+cond_lbl.pack(pady=4)
+
+hum_lbl = tk.Label(main_frame, text="Humidity: ", font=("Arial", 12), bg="white")
+hum_lbl.pack(pady=4)
+
+wind_lbl = tk.Label(main_frame, text="Wind: ", font=("Arial", 12), bg="white")
+wind_lbl.pack(pady=4)
+
+# Export Button
+tk.Button(main_frame, text="💾 Export Weather History", font=("Arial", 12), bg="green", fg="white",
+          activebackground="#228B22", bd=0, width=28, command=export_history).pack(pady=20)
+
+root.mainloop()
+
 
 
 
