@@ -35,24 +35,24 @@ def save_to_db(city, temp, condition, humidity, wind):
     conn.commit()
     conn.close()
 
-def export_history():
-    conn = sqlite3.connect("weather_history.db")
-    c = conn.cursor()
-    c.execute("SELECT * FROM weather")
-    rows = c.fetchall()
-    conn.close()
 
-    if not rows:
-        messagebox.showwarning("No Data", "No data to export.")
-        return
 
-    file_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV files", "*.csv")])
-    if file_path:
-        with open(file_path, mode='w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(['ID', 'City', 'Temperature', 'Condition', 'Humidity', 'Wind', 'Date'])
-            writer.writerows(rows)
-        messagebox.showinfo("Success", f"Data saved to {file_path}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def get_weather():
     city = city_var.get().strip()
     unit = unit_var.get()
