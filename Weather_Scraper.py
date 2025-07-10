@@ -94,7 +94,35 @@ def get_weather():
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
+# ---------- UI SETUP ----------
+init_db()
+root = tk.Tk()
+root.title("🌦️ Stylish Weather App (Fullscreen)")
+root.state('zoomed')  # Make window full screen
+root.configure(bg="#f0f2f5")
 
+# Center Frame
+main_frame = tk.Frame(root, bg="white", bd=2, relief="ridge")
+main_frame.place(relx=0.5, rely=0.5, anchor="center", width=600, height=640)
+
+tk.Label(main_frame, text="🌤️ Weather Forecast", font=("Helvetica", 20, "bold"), bg="white", fg="#007ACC").pack(pady=20)
+
+# City input
+tk.Label(main_frame, text="Enter City Name:", font=("Arial", 13), bg="white").pack(pady=(10, 0))
+city_var = tk.StringVar()
+tk.Entry(main_frame, textvariable=city_var, font=("Arial", 12), width=35, bd=2, relief="groove").pack(pady=6)
+
+# Unit selection
+unit_var = tk.StringVar(value="metric")
+unit_frame = tk.Frame(main_frame, bg="white")
+tk.Label(unit_frame, text="Units:", font=("Arial", 11), bg="white").pack(side=tk.LEFT, padx=5)
+tk.Radiobutton(unit_frame, text="Celsius", variable=unit_var, value="metric", bg="white", font=("Arial", 10)).pack(side=tk.LEFT)
+tk.Radiobutton(unit_frame, text="Fahrenheit", variable=unit_var, value="imperial", bg="white", font=("Arial", 10)).pack(side=tk.LEFT)
+unit_frame.pack(pady=6)
+
+# Get Weather Button
+tk.Button(main_frame, text="🔍 Get Weather", font=("Arial", 12), command=get_weather, bg="#007ACC", fg="white",
+          activebackground="#005F99", width=25, height=1, bd=0).pack(pady=10)
 
 
 
