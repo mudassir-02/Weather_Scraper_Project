@@ -34,3 +34,69 @@ def save_to_db(city, temp, condition, humidity, wind):
               (city, temp, condition, humidity, wind, datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
     conn.commit()
     conn.close()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def get_weather():
+    city = city_var.get().strip()
+    unit = unit_var.get()
+
+    if not city:
+        messagebox.showwarning("Missing Input", "Please enter a city name.")
+        return
+
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units={unit}"
+
+    try:
+        res = requests.get(url)
+        data = res.json()
+
+        if data.get("cod") != 200:
+            raise Exception(data.get("message", "Invalid city or error."))
+
+        temp = f"{data['main']['temp']} °{'C' if unit == 'metric' else 'F'}"
+        condition = data['weather'][0]['description'].title()
+        humidity = f"{data['main']['humidity']} %"
+        wind = f"{data['wind']['speed']} m/s"
+        icon_code = data['weather'][0]['icon']
+        icon_url = f"http://openweathermap.org/img/wn/{icon_code}@2x.png"
+
+        # Update UI
+        temp_lbl.config(text=f"Temperature: {temp}")
+        cond_lbl.config(text=f"Condition: {condition}")
+        hum_lbl.config(text=f"Humidity: {humidity}")
+        wind_lbl.config(text=f"Wind: {wind}")
+
+        icon_img = Image.open(BytesIO(requests.get(icon_url).content))
+        icon_img = icon_img.resize((100, 100), Image.LANCZOS)
+        icon_tk = ImageTk.PhotoImage(icon_img)
+        icon_lbl.config(image=icon_tk)
+        icon_lbl.image = icon_tk
+
+        save_to_db(city, temp, condition, humidity, wind)
+
+    except Exception as e:
+        messagebox.showerror("Error", str(e))
+
+
+
+
+
+
+    
