@@ -27,3 +27,5 @@ git clone https://github.com/mudassir-02/Weather_Scraper_Project.git
 cd Weather_Scraper_Project
 pip install requests pillow
 python main.py
+
+#This project received inter-group contribution from Ahmad Khawar Team for collaboration purpose.
